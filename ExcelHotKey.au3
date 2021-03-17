@@ -1,9 +1,14 @@
-#include <GUIConstantsEx.au3>
-#include <Array.au3>
-
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=F:\Autoit\AU3-ExcelHotkey\icon\logo_dSi_6.ico
+#AutoIt3Wrapper_UseX64=y
+#AutoIt3Wrapper_Res_Description=Excel HotKey
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.1
+#AutoIt3Wrapper_Res_CompanyName=Linlijian
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
+
+#include <GUIConstantsEx.au3>
+#include <Array.au3>
+#include <AutoUpdate.au3>
 
 #Region ### START Global section ###
 Global $Hotkey_config = "Hotkey.ini"
@@ -40,6 +45,24 @@ For $i = 1 To UBound($aArray,1) -1
     $sList &= "|" & $aArray[$i][0]
 Next
 #EndRegion ### END load ini ###
+
+#Region ### START CHECK UPDATE ###
+Local $pServerVersionFile = "https://raw.githubusercontent.com/Linlijian/AU3-ExcelHotKey/main/version.txt"
+Local $pToBeReplacedPathIs= @ScriptDir & "\ExcelHotKey.exe"
+
+CheckVersion($pServerVersionFile, $pToBeReplacedPathIs)
+
+Func CheckVersion($pServerVersionFile, $pToBeReplacedPathIs)
+    $localEXEversion = FileGetVersion($pToBeReplacedPathIs)
+    $remoteEXEversion = _INetGetSource($pServerVersionFile)
+
+    If $localEXEversion < $remoteEXEversion Then
+        MsgBox(64+0,"",'Application have version :'& $localEXEversion&@CRLF&'Wait for update to version :'&$remoteEXEversion)
+        Run(@ScriptDir&'\AutoUpdater.exe')
+        Exit
+    EndIf
+EndFunc
+#EndRegion ### END CHECK UPDATE ###
 
 #Region ### START GUI ###
 $hGUI = GUICreate("Config", 250, 300,-1,-1)
@@ -145,11 +168,11 @@ Func FStart()
     IniWrite($sFilePath, "Config", "ColorHex", GUICtrlRead($hInputColorHex))
     IniWrite($sFilePath, "Config", "Time2Next", GUICtrlRead($hInputTime2Next))
     $aDataConfig = IniReadSection($Hotkey_config,"Config")
-    
+
     While 1
 		;event with form
         $nMsg = GUIGetMsg()
-        
+
         $sList = FHotKeyLoad()
 
         HotKeySet('{'& $sList[1][0] &'}', $sList[1][1])
@@ -159,7 +182,7 @@ Func FStart()
 
 		Switch $nMsg
 			Case $GUI_EVENT_CLOSE
-				GUISetState(@SW_SHOW, $hGUI)	
+				GUISetState(@SW_SHOW, $hGUI)
 				GUIDelete($hGUIStart)
 
                 HotKeySet("{F1}")
@@ -168,7 +191,7 @@ Func FStart()
                 HotKeySet("{F4}")
 				ExitLoop
 		EndSwitch
-	WEnd    
+	WEnd
 EndFunc
 Func FWriteDefualt()
     IniWrite($sFilePath, "Func", "Copy", 'FCopy')
@@ -189,8 +212,8 @@ Func FHotKeyLoad()
         $aData = IniReadSection($Hotkey_config,"HotKey")
     EndIf
 
-    return $aData    
-EndFunc 
+    return $aData
+EndFunc
 Func FConditionRuld()
     Send('{Alt}')
 	Send('{H}')
