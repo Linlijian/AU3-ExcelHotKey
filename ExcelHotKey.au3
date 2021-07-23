@@ -1,5 +1,5 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_Icon=F:\Autoit\AU3-ExcelHotkey\icon\logo_dSi_6.ico
+#AutoIt3Wrapper_Icon=icon\logo_dSi_6.ico
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_Description=Excel HotKey
 #AutoIt3Wrapper_Res_Fileversion=1.1.0.0
