@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Icon=F:\Autoit\AU3-ExcelHotkey\icon\logo_dSi_6.ico
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_Description=Excel HotKey
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.1
+#AutoIt3Wrapper_Res_Fileversion=1.1.0.0
 #AutoIt3Wrapper_Res_CompanyName=Linlijian
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
@@ -204,6 +204,8 @@ Func FWriteDefualt()
     IniWrite($sFilePath, "Func", "NextSheetUnlock", 'FNextSheetUnlock')
     IniWrite($sFilePath, "Func", "NextSheetLock", 'FNextSheetLock')
     IniWrite($sFilePath, "Func", "ConditionRuld", 'FConditionRuld')
+    IniWrite($sFilePath, "Func", "TestMinusValues", 'FTestMinusValues')
+    IniWrite($sFilePath, "Func", "Paste", 'FPaste')
 EndFunc
 Func FHotKeyLoad()
     $aData = IniReadSection($Hotkey_config,"HotKey")
@@ -231,8 +233,15 @@ Func FConditionRuld()
 	Send('0')
 	Send('{ENTER}')
 EndFunc
+Func FTestMinusValues()
+    Send("-1")
+    Send("{ENTER}")
+EndFunc
 Func FCopy()
     Send("{CTRLDOWN}c{CTRLUP}")
+EndFunc
+Func FPaste()
+    Send("{CTRLDOWN}v{CTRLUP}")
 EndFunc
 Func FLookSheet()
     Send("{ALT}")
